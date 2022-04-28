@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:androidprv="http://schemas.android.com/apk/prv/res/android" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:title="@string/fast_pair_settings" app:keywords="@string/keywords_fast_pair">
+    <com.android.settingslib.widget.MainSwitchPreference android:title="@string/fast_pair_main_switch_title" android:key="fast_pair_scan_switch"/>
+    <Preference android:title="@string/fast_pair_saved_devices_title" android:key="saved_devices"/>
+</PreferenceScreen>

@@ -1,0 +1,90 @@
+package com.android.settings.network;
+
+import android.app.FragmentManager;
+import android.os.Bundle;
+import android.telephony.SubscriptionInfo;
+import android.util.Log;
+import com.android.settings.AsyncTaskSidecar;
+import com.android.settings.SidecarFragment;
+
+public class SwitchSlotSidecar extends AsyncTaskSidecar<Param, Result> {
+    private Exception mException;
+
+    static class Param {
+        int command;
+        int port;
+        SubscriptionInfo removedSubInfo;
+        int slotId;
+
+        Param() {
+        }
+    }
+
+    static class Result {
+        Exception exception;
+
+        Result() {
+        }
+    }
+
+    public static SwitchSlotSidecar get(FragmentManager fragmentManager) {
+        return (SwitchSlotSidecar) SidecarFragment.get(fragmentManager, "SwitchSlotSidecar", SwitchSlotSidecar.class, (Bundle) null);
+    }
+
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+    }
+
+    public void runSwitchToRemovableSlot(int i, SubscriptionInfo subscriptionInfo) {
+        Param param = new Param();
+        param.command = 0;
+        param.slotId = i;
+        param.removedSubInfo = subscriptionInfo;
+        param.port = 0;
+        super.run(param);
+    }
+
+    public void runSwitchToEuiccSlot(int i, int i2, SubscriptionInfo subscriptionInfo) {
+        Param param = new Param();
+        param.command = 1;
+        param.slotId = i;
+        param.removedSubInfo = subscriptionInfo;
+        param.port = i2;
+        super.run(param);
+    }
+
+    /* access modifiers changed from: protected */
+    public Result doInBackground(Param param) {
+        Result result = new Result();
+        if (param == null) {
+            result.exception = new UiccSlotsException("Null param");
+            return result;
+        }
+        try {
+            int i = param.command;
+            if (i == 0) {
+                Log.i("SwitchSlotSidecar", "Start to switch to removable slot.");
+                UiccSlotUtil.switchToRemovableSlot(getContext(), param.slotId, param.removedSubInfo);
+            } else if (i != 1) {
+                Log.e("SwitchSlotSidecar", "Wrong command.");
+            } else {
+                Log.i("SwitchSlotSidecar", "Start to switch to euicc slot.");
+                UiccSlotUtil.switchToEuiccSlot(getContext(), param.slotId, param.port, param.removedSubInfo);
+            }
+        } catch (UiccSlotsException e) {
+            result.exception = e;
+        }
+        return result;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onPostExecute(Result result) {
+        Exception exc = result.exception;
+        if (exc == null) {
+            setState(2, 0);
+            return;
+        }
+        this.mException = exc;
+        setState(3, 0);
+    }
+}

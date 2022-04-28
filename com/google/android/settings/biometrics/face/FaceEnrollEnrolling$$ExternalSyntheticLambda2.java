@@ -1,0 +1,16 @@
+package com.google.android.settings.biometrics.face;
+
+import android.content.DialogInterface;
+
+/* compiled from: R8$$SyntheticClass */
+public final /* synthetic */ class FaceEnrollEnrolling$$ExternalSyntheticLambda2 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ FaceEnrollEnrolling f$0;
+
+    public /* synthetic */ FaceEnrollEnrolling$$ExternalSyntheticLambda2(FaceEnrollEnrolling faceEnrollEnrolling) {
+        this.f$0 = faceEnrollEnrolling;
+    }
+
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$showPartialEnrollmentDialog$3(dialogInterface, i);
+    }
+}
